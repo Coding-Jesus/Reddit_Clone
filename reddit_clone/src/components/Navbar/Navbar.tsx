@@ -8,15 +8,16 @@ const Navbar: React.FC = () => {
         <Flex bg="white" height="44px" padding="6px 12px">
             <Flex align="center">
                 <Image src="/images/redditFace.svg" height="30px" />
-                <Image src="/images/redditText.svg"
+                <Image
+                    src="/images/redditText.svg"
                     height="46px"
-                    display={{ base: "none", md: "unset" }} />
+                    display={{ base: "none", md: "unset" }}
+                />
             </Flex>
             {/*<Directory /> */}
             <SearchInput />
             <RightContent />
-
-        </Flex>
+        </Flex >
     );
 };
 export default Navbar;
