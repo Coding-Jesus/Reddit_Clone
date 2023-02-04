@@ -2,7 +2,6 @@ import { AuthModalState } from '@/atoms/authModalAtom';
 import { Input, Button, Flex, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import Login from './Login';
 
 const SignUp: React.FC = () => {
     const setAuthModalState = useSetRecoilState(AuthModalState);
@@ -112,7 +111,7 @@ const SignUp: React.FC = () => {
                             view: "login",
                         }))
                     }
-                >Sign Ip
+                >Sign In
                 </Text>
             </Flex>
 
