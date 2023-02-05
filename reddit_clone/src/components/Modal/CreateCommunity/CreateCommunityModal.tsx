@@ -1,5 +1,8 @@
+import { auth, firestore } from '../../../firebase/clientApp';
 import { Button, Modal, Text, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Box, Divider, Input, Checkbox, Stack, Flex, Icon } from '@chakra-ui/react';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs';
 import { HiLockClosed } from 'react-icons/hi';
 
@@ -12,19 +15,66 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
     open,
     handleClose
 }) => {
+    const [user] = useAuthState(auth);
     const [communityName, setCommunityName] = useState("");
     const [charsRemaining, setCharsRemaining] = useState(21);
     const [communityType, setCommunityType] = useState("public");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value.length > 21) return;
-        setCommunityName(event.target.value); //calc how many chars left 
+        setCommunityName(event.target.value);
+        //calc how many chars left 
         setCharsRemaining(21 - event.target.value.length);
     };
 
     const onCommunityTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCommunityType(event.target.name);
     }
+
+    const handleCreateCommunity = async () => {
+        if (error) setError("");
+        // Validate the community name
+        if (error) setError("");
+        const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+        if (format.test(communityName) || communityName.length < 3) {
+            setError(
+                "Community names must be between 3-21 characters, and can only contain letters, numbers, or underscores."
+            );
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const communityDocRef = doc(firestore, "communities", communityName);
+
+            // Check if community exists in db
+            const communityDoc = await getDoc(communityDocRef);
+            if (communityDoc.exists()) {
+                throw new Error(`Sorry, r/${communityName} is already taken. Try another`);
+            }
+
+            // Create community
+            await setDoc(communityDocRef, {
+                creatorId: user?.uid,
+                createdAt: serverTimestamp(),
+                numberOfMembers: 1,
+                privacyType: communityType,
+            });
+        } catch (error: any) {
+            console.log("handleCreateCommunity error", error);
+            setError(error.message)
+        }
+        // Create the community document in firebase
+        // Check that name is not take
+        // If name is valid, create community
+
+
+        setLoading(false);
+    };
     return (
         <>
 
@@ -40,8 +90,11 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
                     </ModalHeader>
 
                     <Box pl={3} pr={3}>
+
                         <Divider />
+
                         <ModalCloseButton />
+
                         <ModalBody
                             display="flex"
                             flexDirection="column"
@@ -52,11 +105,13 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
                                 fontSize={15}>
                                 Name
                             </Text>
+
                             <Text
                                 fontSize={12}
                                 color="gray.500">
                                 Community names including capitalization cannot be changed
                             </Text>
+
                             <Text
                                 position="relative"
                                 top="28px"
@@ -76,6 +131,15 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
                                 color={charsRemaining === 0 ? "red" : "gray.500"}>
                                 {charsRemaining} Charecters remaining
                             </Text>
+
+                            <Text
+                                fontSize="10pt"
+                                color="red"
+                                pt={1}
+                            >
+                                {error}
+                            </Text>
+
                             <Box>
                                 <Text
                                     fontWeight={600}
@@ -175,8 +239,13 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
                         >
                             Cancle
                         </Button>
+
                         <Button height="30px"
-                            onClick={() => { }}>Create Community</Button>
+                            onClick={handleCreateCommunity}
+                            isLoading={loading}
+                        >
+                            Create Community
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal >
