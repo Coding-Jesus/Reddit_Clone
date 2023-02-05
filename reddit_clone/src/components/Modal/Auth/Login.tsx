@@ -114,7 +114,7 @@ const Login: React.FC<LoginProps> = () => {
                     cursor="pointer"
                     onClick={() => setAuthModalState((prev) => ({
                         ...prev,
-                        view: "resetPassword",
+                        view: "resetpassword",
                     }))
                     }
                 >
