@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <RecoilRoot>
       <ChakraProvider theme={theme}>
         <Layout>
-          <Component {...pageProps} />'IntrinsicAttr
+          <Component {...pageProps} />
         </Layout>
       </ChakraProvider>
     </RecoilRoot>
