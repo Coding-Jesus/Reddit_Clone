@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
                                 as={FaReddit}
                                 fontSize={64}
                                 position="absolute"
-                                bottom="18px"
+                                bottom="105px"
                                 ml="3px"
                                 color="blue.500" />
                         </Flex>
