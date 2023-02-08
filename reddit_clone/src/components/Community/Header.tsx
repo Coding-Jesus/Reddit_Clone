@@ -3,6 +3,7 @@ import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 import { BsCircleFill } from 'react-icons/bs';
 import { FaReddit } from 'react-icons/fa';
+import useCommunityData from '../../hooks/useCommunityData';
 
 
 type HeaderProps = {
@@ -10,7 +11,10 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ communityData }) => {
-    const isJoined = false; // read from communitySnippets
+    const { communityStateValue, onJoinOrLeaveCommunity, loading } = useCommunityData();
+    const isJoined = !!communityStateValue.mySnippets.find(
+        (item) => item.communityId === communityData.id
+    );
 
     return (
         <Flex
@@ -66,9 +70,10 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
                             pr={6}
                             pl={6}
                             mt={2}
-                            onClick={() => { }}
+                            isLoading={loading}
+                            onClick={() => onJoinOrLeaveCommunity(communityData, isJoined)}
                         >
-                            {isJoined ? "joined" : "join"}
+                            {isJoined ? "Joined" : "join"}
                         </Button>
                     </Flex>
                 </Flex>
