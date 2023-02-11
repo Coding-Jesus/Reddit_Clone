@@ -11,7 +11,7 @@ export type Post = {
     voteStatus: number;
     imageURL?: string;
     communityImageURL?: string;
-    createdAt?: Timestamp;
+    createdAt: Timestamp;
     editedAt?: Timestamp;
 };
 

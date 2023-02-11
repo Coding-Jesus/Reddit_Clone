@@ -10,9 +10,14 @@ const usePosts = () => {
     const onSelectPost = () => { };
 
     const onDeletePost = async () => { };
+
     return {
         postStateValue,
         setPostStateValue,
+        onVote,
+        onSelectPost,
+        onDeletePost,
     };
 };
+
 export default usePosts;
