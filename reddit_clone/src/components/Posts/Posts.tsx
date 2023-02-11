@@ -7,6 +7,7 @@ import { Post } from '../../atoms/postsAtom';
 import PostItem from './PostItem';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Stack } from '@chakra-ui/react';
+import Loader from './Loader';
 
 type PostsProps = {
     communityData: Community;
@@ -27,6 +28,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
 
     const getPosts = async () => {
         try {
+            setLoading(true);
             // get posts for this community 
             const postsQuery = query(
                 collection(firestore, "posts"),
@@ -47,6 +49,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
         } catch (error: any) {
             console.log("getPosts error", error.message);
         }
+        setLoading(false);
     };
 
 
@@ -55,18 +58,25 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
     }, []);
 
     return (
-        <Stack>
-            {postStateValue.posts.map((item) => (
-                <PostItem
-                    post={item}
-                    userIsCreator={user?.uid === item.creatorId}
-                    userVoteValue={undefined}
-                    onVote={onVote}
-                    onSelectsPost={onSelectPost}
-                    onDeletePost={onDeletePost}
-                />
-            ))}
-        </Stack>
+        <>
+            {loading ? (
+                <Loader />
+            ) : (
+                <Stack>
+                    {postStateValue.posts.map((item) => (
+                        <PostItem
+                            key={item.id}
+                            post={item}
+                            userIsCreator={user?.uid === item.creatorId}
+                            userVoteValue={undefined}
+                            onVote={onVote}
+                            onSelectsPost={onSelectPost}
+                            onDeletePost={onDeletePost}
+                        />
+                    ))}
+                </Stack>
+            )}
+        </>
     )
 }
 export default Posts;
