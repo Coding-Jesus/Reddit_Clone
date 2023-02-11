@@ -46,6 +46,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
             }));
 
             console.log("posts", posts);
+
         } catch (error: any) {
             console.log("getPosts error", error.message);
         }
