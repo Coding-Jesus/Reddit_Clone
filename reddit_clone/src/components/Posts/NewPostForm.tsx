@@ -60,7 +60,6 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
         const { communityId } = router.query;
         // Create new post object => type post
         const newPost: Post = {
-            id: "",
             communityId: communityId as string,
             creatorId: user?.uid,
             creatorDisplayName: user.email!.split("@")[0],
@@ -70,7 +69,9 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
             voteStatus: 0,
             createdAt: serverTimestamp() as Timestamp,
         };
+
         setLoading(true);
+
         try {
             // store the post in db
             const postDocRef = await addDoc(collection(firestore, "posts"), newPost);

@@ -4,9 +4,15 @@ import React from 'react';
 import NewPostForm from '../../../components/Posts/NewPostForm';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../../firebase/clientApp';
+import { useRecoilValue } from 'recoil';
+import { communityState } from '@/atoms/communitiesAtom';
 
 const submit: React.FC = () => {
     const [user] = useAuthState(auth);
+
+    const communityStateValue = useRecoilValue(communityState);
+    console.log("Community", communityStateValue);
+
     return (
         <PageContent>
             <>
