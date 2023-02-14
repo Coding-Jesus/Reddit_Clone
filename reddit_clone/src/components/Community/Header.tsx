@@ -33,7 +33,8 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
                     width="95%"
                     maxWidth="860px"
                 >
-                    {communityStateValue.currentCommunity.imageURL ? (
+                    {communityStateValue.currentCommunity &&
+                        communityStateValue.currentCommunity.imageURL ? (
                         <Flex>
                             <Icon as={BsCircleFill}
                                 fontSize={70}
