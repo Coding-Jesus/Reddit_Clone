@@ -33,8 +33,25 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
                     width="95%"
                     maxWidth="860px"
                 >
-                    {communityData.imageURL ? (
-                        <Image />
+                    {communityStateValue.currentCommunity.imageURL ? (
+                        <Flex>
+                            <Icon as={BsCircleFill}
+                                fontSize={70}
+                                position="relative"
+                                top={-3}
+                                color="white" />
+                            <Image
+                                src={communityStateValue.currentCommunity.imageURL}
+                                fontSize={70}
+                                position="relative"
+                                ml="-68px"
+                                top={-2}
+                                color="white"
+                                boxSize="66px"
+                                borderRadius="full"
+                                alt="Community Image"
+                            />
+                        </Flex>
                     ) : (
                         <Flex>
                             <Icon as={BsCircleFill}

@@ -23,9 +23,9 @@ const usePosts = () => {
             await deleteDoc(postDocRef);
 
             // update recoil state
-            setPostStateValue(prev => ({
+            setPostStateValue((prev) => ({
                 ...prev,
-                posts: prev.posts.filter((item) => item.id! == post.id)
+                posts: prev.posts.filter((item) => item.id !== post.id)
             }))
             return true;
         } catch (error: any) {
