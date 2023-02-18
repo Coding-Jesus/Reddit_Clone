@@ -76,7 +76,7 @@ const Item: React.FC<ItemProps> = ({
                             <Text
                                 fontSize="9pt"
                                 _hover={{ color: "blue.500" }}
-                                onClick={() => { }}
+                                onClick={() => onDeleteComment(comment)}
                             >
                                 Delete
                             </Text>
