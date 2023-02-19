@@ -20,9 +20,9 @@ interface DirectoryMenuState {
 
 export const defaultMenuItem: DirectoryMenuItem = {
     displayText: "Home",
-    link: '/'
+    link: '/',
     icon: TiHome,
-    iconColor: "black"
+    iconColor: "black",
 }
 
 export const defaultMenuState: DirectoryMenuState = {
