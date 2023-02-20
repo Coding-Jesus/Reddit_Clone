@@ -1,5 +1,5 @@
 import { communityState } from "@/atoms/communitiesAtom";
-import { Post } from "@/atoms/postsAtom";
+import { Post, postVote } from "@/atoms/postsAtom";
 import CreatePostLink from "@/components/Community/CreatePostLink";
 import PageContent from "@/components/Layout/PageContent";
 import Loader from "@/components/Posts/Loader";
@@ -72,7 +72,7 @@ const Home: NextPage = () => {
       setPostStateValue((prev) => ({
         ...prev,
         posts: posts as Post[],
-      }))
+      }));
 
     } catch (error: any) {
       console.log("BuildNoUserHomeFeed Error", error.message)
@@ -81,7 +81,29 @@ const Home: NextPage = () => {
 
   };
 
-  const getUserPostVotes = () => { };
+  const getUserPostVotes = async () => {
+
+    try {
+      const postIds = postStateValue.posts.map((post) => post.id);
+      const postVotesQuery = query(collection
+        (firestore, `users/${user?.uid}/postVotes`),
+        where("postId", "in", postIds)
+      );
+      const postVoteDocs = await getDocs(postVotesQuery);
+      const postVotes = postVoteDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: postVotes as postVote[],
+      }));
+
+    } catch (error: any) {
+      console.log("getUserPostVotes error", error.message)
+    }
+  };
 
   // Build logged in user home feeed
   useEffect(() => {
@@ -92,6 +114,20 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (!user && !loadingUser) buildNoUserHomeFeed();
   }, [user, loadingUser]);
+
+  // User postVotes effect
+  useEffect(() => {
+    if (user && postStateValue.posts.length) getUserPostVotes();
+
+    return () => {
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: [],
+      }))
+    }
+
+  }, [user, postStateValue.posts])
+
 
   return (
     <PageContent>
